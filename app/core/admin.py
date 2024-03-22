@@ -7,12 +7,13 @@ from django.utils.translation import gettext_lazy as _
 
 from core import models
 
+
 class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users."""
     ordering = ['id']
     list_display = ['email', 'name']
     fieldsets = (
-        (None, {'fields':('email', 'password')}),
+        (None, {'fields': ('email', 'password')}),
         (
            _('Permissions'),
            {
@@ -32,7 +33,7 @@ class UserAdmin(BaseUserAdmin):
     )
     readonly_fields = ['last_login']
     add_fieldsets = (
-        (None,{
+        (None, {
             'classes': ('wide',),
             'fields': (
                 'email',
@@ -42,10 +43,9 @@ class UserAdmin(BaseUserAdmin):
                 'is_active',
                 'is_staff',
                 'is_superuser',
-
             )
-        } ),
-    )
+        }),)
+
 
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Recipe)

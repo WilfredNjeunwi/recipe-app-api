@@ -22,9 +22,11 @@ from recipe.serializers import (
 
 RECIPES_URL = reverse('recipe:recipe-list')
 
+
 def detail_url(recipe_id):
     """Create and return a recipe detail URL."""
     return reverse('recipe:recipe-detail', args=[recipe_id])
+
 
 def create_recipe(user, **params):
     """Create and return a sample recipe."""
@@ -39,6 +41,7 @@ def create_recipe(user, **params):
 
     recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
+
 
 def create_user(**params):
     """Create and return user"""
@@ -57,12 +60,16 @@ class PublicRecipeAPITests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
+
 class PrivateRecipeApiTests(TestCase):
     """Test authenticated API requests."""
 
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user(email='user@example.com', password='testpass123')
+        self.user = create_user(
+            email='user@example.com',
+            password='testpass123'
+            )
         self.client.force_authenticate(self.user)
 
     def test_retrive_recipes(self):
@@ -80,8 +87,8 @@ class PrivateRecipeApiTests(TestCase):
     def test_recipe_list_limited_to_user(self):
         """Test list of recipes is limited to authenticated user."""
         other_user = create_user(
-            email= 'other@example.com',
-            password= 'password123'
+            email='other@example.com',
+            password='password123'
         )
         create_recipe(user=other_user)
         create_recipe(user=self.user)
@@ -131,7 +138,7 @@ class PrivateRecipeApiTests(TestCase):
             'title': 'New recipe title'
         }
         url = detail_url(recipe.id)
-        res = self.client.patch(url, payload )
+        res = self.client.patch(url, payload)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         recipe.refresh_from_db()
@@ -166,7 +173,7 @@ class PrivateRecipeApiTests(TestCase):
     def test_update_user_returns_error(self):
         """Test changing the recipe user results in an error."""
         new_user = create_user(email='user2@example.com', password='test123')
-        recipe = create_recipe(user = self.user)
+        recipe = create_recipe(user=self.user)
 
         payload = {'user': new_user.id}
         url = detail_url(recipe.id)
@@ -198,7 +205,7 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_create_recipe_with_new_tags(self):
         """Test creating a recipe with new tags."""
-        payload =  {
+        payload = {
             'title': 'Thai prawn Curry',
             'time_minutes': 30,
             'price': Decimal('2.50'),
@@ -210,7 +217,7 @@ class PrivateRecipeApiTests(TestCase):
         recipes = Recipe.objects.filter(user=self.user)
         self.assertEqual(recipes.count(), 1),
         recipe = recipes[0]
-        self.assertEqual(recipe.tags.count(),2)
+        self.assertEqual(recipe.tags.count(), 2)
         for tag in payload['tags']:
             exists = recipe.tags.filter(
                 name=tag['name'],
