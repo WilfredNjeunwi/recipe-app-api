@@ -429,7 +429,7 @@ class PrivateRecipeApiTests(TestCase):
 
 
 class ImageUploadTests(TestCase):
-    """Tests for the image upload API"""
+    """Tests for the image upload API."""
 
     def setUp(self):
         self.client = APIClient()
