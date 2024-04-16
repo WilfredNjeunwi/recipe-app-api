@@ -1,12 +1,12 @@
 FROM nginxinc/nginx-unprivileged:1-alpine
 LABEL maintainer="mrdayter@gmail.com"
 
-COPY ./default.conf.tpl /etc/nginxdefault.conf.tpl
-COPY ./unwgi_params /etc/nginx/uwsgi_params
+COPY ./default.conf.tpl /etc/nginx/default.conf.tpl
+COPY ./uwsgi_params /etc/nginx/uwsgi_params
 COPY ./run.sh /run.sh
 
 ENV LISTEN_PORT=8000
-ENV APP_HOST=APP_HOST
+ENV APP_HOST=app
 ENV APP_PORT=9000
 
 USER root
